@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScholaLynx - Smart Student Asset & Clearance Registry</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-accent: #2563eb;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-main);
+            padding-bottom: 30px;
+        }
+
+        /* ACCESS SCREENS */
+        #auth-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            padding: 20px;
+        }
+
+        .welcome-container {
+            background: var(--card-bg);
+            padding: 35px 25px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .welcome-container h2 {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .welcome-container p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* INPUTS AND BUTTONS */
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+            background: #f8fafc;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-accent);
+            background: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover { opacity: 0.9; }
+        .btn-secondary { background: var(--secondary); }
+        .btn-danger { background: var(--danger); }
+
+        /* MAIN DASHBOARD */
+        #main-dashboard { display: none; }
+
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 { font-size: 18px; font-weight: 800; text-transform: uppercase; }
+        .navbar p { font-size: 11px; color: #60a5fa; font-weight: bold; margin-top: 3px; letter-spacing: 1px; }
+        
+        .nav-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .nav-actions button { padding: 8px 4px; font-size: 11px; border-radius: 4px; }
+
+        .content-body {
+            max-width: 1200px;
+            margin: 15px auto;
+            padding: 0 10px;
+        }
+
+        /* COUNTERS */
+        .stats-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 12px 6px;
+            border-radius: 10px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary-accent);
+        }
+        .stat-box.success { border-bottom-color: var(--secondary); }
+        .stat-box.danger { border-bottom-color: var(--danger); }
+        .stat-box h3 { font-size: 20px; font-weight: 800; }
+        .stat-box p { font-size: 10px; color: var(--text-muted); }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+
+        /* TOGGLES AREA FOR ITEMS */
+        .grid-toggles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .item-toggle-wrapper {
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .item-toggle-wrapper span {
+            font-size: 11px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .btn-status {
+            width: 100%;
+            padding: 6px;
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .btn-status.active-cleared {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #6ee7b7;
+        }
+
+        /* TABLES */
+        .table-scroll { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        th { background: #f8fafc; color: var(--text-muted); }
+
+        .sign-tiki { color: var(--secondary); font-weight: 800; text-align: center; }
+        .sign-kosa { color: var(--danger); font-weight: 800; text-align: center; }
+
+        .debtor-card-item {
+            background: #fff5f5;
+            border-left: 4px solid var(--danger);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .debt-tag {
+            background: #ffe4e6;
+            color: #b91c1c;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 3px;
+        }
+
+        #noticeboard-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+        .noticeboard-paper {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 1. SECURITY PORTAL (SIGNUP & LOGIN OPTIONS) ================= -->
+    <div id="auth-screen">
+        <!-- SEHEMU YA A: LOGIN -->
+        <div class="welcome-container" id="box-login" style="display: block;">
+            <h2>Ingia Mfumoni</h2>
+            <p>Weka password yako ya ulinzi uliyoitengeneza kuanza kuaccess mfumo.</p>
+            <input type="password" id="get-pwd" placeholder="Andika Password yako hapa...">
+            <button onclick="verifyAccess()">Fungua Mfumo</button>
+            <p id="err-log" style="color:var(--danger); display:none; font-size:12px; margin-top:10px; font-weight:bold;">Password Sio Sahihi!</p>
+            
+            <hr style="margin:20px 0; border:0; border-top:1px solid var(--border-color);">
+            <p style="font-size:12px;">Je, ni mara yako ya kwanza kabisa kwenye kifaa hiki au huna password?</p>
+            <button class="btn-secondary" style="padding:8px; font-size:12px;" onclick="switchAuthMode('signup')">Sajili Kifaa Kipya / Create Password</button>
+        </div>
+
+        <!-- SEHEMU YA B: SIGNUP -->
+        <div class="welcome-container" id="box-signup" style="display: none;">
+            <h2>Sajili Mfumo Mpya</h2>
+            <p>Tengeneza password mpya ya siri utakayoitumia kulinda taarifa hizi kwenye kifaa hiki.</p>
+            <input type="password" id="new-pwd" placeholder="Unda Password Mpya...">
+            <button class="btn-secondary" onclick="registerPassword()">Hifadhi na Ingia</button>
+            
+            <hr style="margin:20px 0; border:0; border-top:1px solid var(--border-color);">
+            <button style="padding:8px; font-size:12px; background:#475569;" onclick="switchAuthMode('login')">Rudi Kwenye Kuingia (Login)</button>
+        </div>
+    </div>
+
+    <!-- ================= 2. MAIN SYSTEM DASHBOARD ================= -->
+    <div id="main-dashboard">
+        <div class="navbar">
+            <h1 id="top-school-title">SCHOLALYNX REGISTRY</h1>
+            <p>ASSET AND CLEARANCE CONTROL CENTER</p>
+            <div class="nav-actions">
+                <button class="btn-secondary" onclick="openNoticeboard()">Bodi ya Matangazo</button>
+                <button style="background:#475569;" onclick="exportToExcel()">Pakua Excel</button>
+                <button class="btn-danger" onclick="logout()">Toka</button>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <!-- COUNTERS -->
+            <div class="stats-wrapper">
+                <div class="stat-box">
